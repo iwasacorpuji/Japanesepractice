@@ -79,42 +79,64 @@
             { question: "30.「休日は(  )です」", choices: ["日曜日", "火曜日", "月曜日", "水曜日"], correctAnswer: 1 },
         ];;
 
-        let currentQuestionIndex = 0;
-        let correctCount = 0;
+       let currentQuestionIndex = 0;
+let correctCount = 0;
 
-        function loadQuestion() {
-            const questionData = questions[currentQuestionIndex];
-            document.getElementById("question-text").textContent = questionData.question;
-            document.getElementById("choice-1").textContent = questionData.choices[0];
-            document.getElementById("choice-2").textContent = questionData.choices[1];
-            document.getElementById("choice-3").textContent = questionData.choices[2];
-            document.getElementById("choice-4").textContent = questionData.choices[3];
-            document.getElementById("result-text").textContent = "";
-        }
+function loadQuestion() {
+    const questionData = questions[currentQuestionIndex];
+    document.getElementById("question-text").textContent = questionData.question;
+    document.getElementById("choice-1").textContent = questionData.choices[0];
+    document.getElementById("choice-2").textContent = questionData.choices[1];
+    document.getElementById("choice-3").textContent = questionData.choices[2];
+    document.getElementById("choice-4").textContent = questionData.choices[3];
+    document.getElementById("result-text").textContent = "";
+}
 
-        function checkAnswer(choice) {
-            const questionData = questions[currentQuestionIndex];
-            const resultText = document.getElementById("result-text");
+function checkAnswer(choice) {
+    const questionData = questions[currentQuestionIndex];
+    const resultText = document.getElementById("result-text");
 
-            if (choice === questionData.correctAnswer) {
-                resultText.textContent = "〇 正解！";
-                correctCount++;
-            } else {
-                resultText.textContent = "× 不正解！";
-            }
+    if (choice === questionData.correctAnswer) {
+        resultText.textContent = "〇 正解！";
+        correctCount++;
+    } else {
+        resultText.textContent = "× 不正解！";
+    }
 
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
-                setTimeout(loadQuestion, 1000);
-            } else {
-                setTimeout(() => {
-                    document.getElementById("quiz").innerHTML = `<h2>クイズ終了！お疲れ様でした！</h2><p>正解数: ${correctCount} / ${questions.length}</p>`;
-                }, 1000);
-            }
-        }
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+        setTimeout(loadQuestion, 1000);
+    } else {
+        setTimeout(showResult, 1000);
+    }
+}
 
-        loadQuestion();
+function showResult() {
+    document.getElementById("quiz").innerHTML = `
+        <h2>クイズ終了！お疲れ様でした！</h2>
+        <p>正解数: ${correctCount} / ${questions.length}</p>
+        <button onclick="restartQuiz()" style="padding: 10px; font-size: 16px;">再チャレンジ</button>
+    `;
+}
+
+function restartQuiz() {
+    currentQuestionIndex = 0;
+    correctCount = 0;
+    document.getElementById("quiz").innerHTML = `
+        <div class="question" id="question-text"></div>
+        <div class="choices">
+            <button class="choice" id="choice-1" onclick="checkAnswer(1)"></button>
+            <button class="choice" id="choice-2" onclick="checkAnswer(2)"></button>
+            <button class="choice" id="choice-3" onclick="checkAnswer(3)"></button>
+            <button class="choice" id="choice-4" onclick="checkAnswer(4)"></button>
+        </div>
+        <div class="result" id="result-text"></div>
+    `;
+    loadQuestion();
+}
+
+loadQuestion();
+
     </script>
-
 </body>
 </html>
