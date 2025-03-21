@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N3 日本語クイズ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .question {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .choices {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .choice {
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>N3 日本語一問一答クイズ</h1>
+    <div id="quiz">
+        <div class="question" id="question-text"></div>
+        <div class="choices">
+            <button class="choice" id="choice-1" onclick="checkAnswer(1)"></button>
+            <button class="choice" id="choice-2" onclick="checkAnswer(2)"></button>
+            <button class="choice" id="choice-3" onclick="checkAnswer(3)"></button>
+            <button class="choice" id="choice-4" onclick="checkAnswer(4)"></button>
+        </div>
+        <div class="result" id="result-text"></div>
+    </div>
+
+    <script>
+         const questions = [
+            { question: "1.どの りょうりが おいしい（  ） わかりません", choices: ["と", "か", "に", "の"], correctAnswer: 2 },　
+            { question: "2.その じかんは みちが こんでいる（  ）。", choices: ["としれます", "かもしれます", "としれません", "かもしれません"], correctAnswer: 4 },
+            { question: "3.こどもに えいごを （  ）", choices: ["ならわせます", "ならわれます", "おならいます", "ならってあります"], correctAnswer: 1 },
+            { question: "4.この へやは きれい （  ）、そとの けしきも いいです。", choices: ["だけど", "くて", "だし", "と"], correctAnswer: 3 },
+            { question: "5.今 １７０円 （  ）もっていません", choices: ["だけ", "あまり", "は", "しか"], correctAnswer: 4 },
+            { question: "6.へやを （  ） します。", choices: ["きれいく", "きれく", "きれいに", "きれに"], correctAnswer: 3 },
+            { question: "7.あめが (  )ですから、かさを 持ってきました", choices: ["ふりそう", "ふったそう", "ふるまえ", "ふったばかり"], correctAnswer: 1 },
+            { question: "8.ニュースによると きのう とうきょうで じしんが (  )", choices: ["あるそうです", "あったそうです", "あるそうでした", "あったそうでした"], correctAnswer: 2 },
+            { question: "9.もう すこし（  ）、買います。", choices: ["安さの", "安くて", "安かったら", "安すぎても"], correctAnswer: 3 },
+            { question: "10.今（  ）中ですから、あとで でんわ します", choices: ["しょくじ", "しょくじの", "食べて", "食べている"], correctAnswer: 1 },
+            { question: "11わたしは めがねを（  ）おふろに はいります。", choices: ["かける", "かけて", "かけた", "かけている"], correctAnswer: 2 },
+            { question: "12.あついので、まど（  ）", choices: ["があいています", "があいてあります", "をあいています", "をあけてあります"], correctAnswer: 4 },
+            { question: "13.日本語を べんきょうする（  ） 日本へ 来ました。", choices: ["ように", "のに", "ために", "に"], correctAnswer: 3 },
+            { question: "14.おさけを （  ）と、きもちが わるくなります。", choices: ["飲みすぎだ", "飲みにくい", "飲みやすい", "飲みすぎる"], correctAnswer: 4 },
+            { question: "15.としょかんでは、ほんを かりたり、べんきょう（  ）", choices: ["します", "したります", "したりします", "したりたります"], correctAnswer: 3 },
+            { question: "16.ちちが わたしに あたらしい カメラを 買って（　　）。", choices: ["くれました", "あげました", "もらいました", "いただきました"], correctAnswer: 1 },
+            { question: "17.（  ）、まいにち べんきょうします。", choices: ["いそがしくても", "いそがしかったら", "いそがしいとき", "いそがしければ"], correctAnswer: 1 },
+            { question: "18.（  ）、テレビを 見ます。", choices: ["ひまのとき", "ひまなとき", "ひまとき", "ひまだったとき"], correctAnswer: 2 },
+            { question: "19.今から ふろに （  ）ところです", choices: ["はいる", "はいっている", "はいった", "はいって"], correctAnswer: 1 },
+            { question: "20.おんがくを （  ）さんぽします。", choices: ["きいて", "ききちゅうに", "きいている", "ききながら"], correctAnswer: 4 },
+            { question: "21.ラーメン（  ） この みせが おいしいですよ。", choices: ["けど", "かも", "なら", "しか"], correctAnswer: 3 },
+            { question: "22.この パソコンは （  ）やすいです。", choices: ["つかう", "つかい", "つかうのが", "つかうことが"], correctAnswer: 2 },
+            { question: "23.高い テレビを （  ）、すぐ こわれました。", choices: ["買ったのに", "買っても", "買うために", "買うと"], correctAnswer: 1 },
+            { question: "24.やさいも （  ） いいですよ。", choices: ["食べなければ", "食べたほうが", "食べすぎると", "食べるらしいと"], correctAnswer: 2 },
+            { question: "25.ここには １人（  ） しっている 人が いません。", choices: ["が", "は", "で", "も"], correctAnswer: 4 },
+            { question: "26.いもうとに わたしの おかしを （　　）。", choices: ["食べてくれました", "食べました", "食べられました", "食べなさい"], correctAnswer: 3 },
+            { question: "27.よやく（  ）が わかりません。", choices: ["かた", "のかた", "しかた", "のしかた"], correctAnswer: 4 },
+            { question: "28.髙谷さんが おいしいやきにくやさんを（  ）。", choices: ["しっている", "しらない", "しっていた", "しっているふりをした"], correctAnswer: 1 },
+            { question: "29.ざいりょうを (  )します。", choices: ["せつだん", "ていしゃく", "ほうき", "なげ"], correctAnswer: 1 },
+            { question: "30.「休日は(  )です」", choices: ["日曜日", "火曜日", "月曜日", "水曜日"], correctAnswer: 1 },
+        ];;
+
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+
+        function loadQuestion() {
+            const questionData = questions[currentQuestionIndex];
+            document.getElementById("question-text").textContent = questionData.question;
+            document.getElementById("choice-1").textContent = questionData.choices[0];
+            document.getElementById("choice-2").textContent = questionData.choices[1];
+            document.getElementById("choice-3").textContent = questionData.choices[2];
+            document.getElementById("choice-4").textContent = questionData.choices[3];
+            document.getElementById("result-text").textContent = "";
+        }
+
+        function checkAnswer(choice) {
+            const questionData = questions[currentQuestionIndex];
+            const resultText = document.getElementById("result-text");
+
+            if (choice === questionData.correctAnswer) {
+                resultText.textContent = "〇 正解！";
+                correctCount++;
+            } else {
+                resultText.textContent = "× 不正解！";
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(loadQuestion, 1000);
+            } else {
+                setTimeout(() => {
+                    document.getElementById("quiz").innerHTML = `<h2>クイズ終了！お疲れ様でした！</h2><p>正解数: ${correctCount} / ${questions.length}</p>`;
+                }, 1000);
+            }
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
